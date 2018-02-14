@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-NI'
 
 TIME_ZONE = 'UTC'
 
@@ -123,3 +123,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+GRAPPELLI_SWITCH_USER = "True"
+
+GEOPOSITION_GOOGLE_MAPS_API_KEY = 'YOUR_API_KEY'
+
+GRAPPELLI_ADMIN_TITLE = 'BANPRO'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE              = 900
