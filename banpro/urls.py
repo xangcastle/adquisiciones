@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^adminactions/', include('adminactions.urls')),
     url(r'^compras/', include('compras.urls')),
+    url(r'^extras/', include('extras.extras_urls')),
+    url(r'^ajax/', include('extras.ajax_urls')),
 ]
