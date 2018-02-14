@@ -1,0 +1,25 @@
+{% extends "admin/change_list.html"%}
+
+{% block extrahead %}
+<script type="text/javascript">
+  (function($) {
+    $(document).ready(function(){
+
+      var asignar = function(){
+        $.ajax({
+          url: '/compras/asignar_cuenta/',
+          type:'POST',
+          data: {'sectorizacion': $(this).data('sectorizacion'), 'nuevo': $(this).data('nuevo')},
+          success: function(data){
+            console.log(data.code + " " + data.mensaje);
+            location.reload();
+          }
+        });
+      }
+
+      $('.sugerencia').on('click', asignar);
+
+    });
+  })(grp.jQuery)
+</script>
+{% endblock %}

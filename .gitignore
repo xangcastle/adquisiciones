@@ -1,0 +1,6 @@
+/venv
+/media
+/static
+/.idea
+*.pyc
+*.pyo
