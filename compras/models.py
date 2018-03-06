@@ -188,3 +188,14 @@ class Expediente(models.Model):
         verbose_name_plural = "Expediente"
 
 
+def datos_evaluacion(proveedores):
+    data = []
+    for p in proveedores:
+        row = [p.codigo_cliente, p.nombre, p.actividad_economica, p.identificacion, p.direccion, p.contacto, p.telefono, p.pago_anual, p.buro, get_resp(IMPORTANCIA, p.importacia), p.importacia
+              , get_resp(COMPLEJIDAD, p.complejidad), p.complejidad, get_resp(REEMPLAZO, p.reemplazo), p.reemplazo, get_resp(CREDITO, p.credito), p.credito
+               , get_resp(ANUAL, p.anual), p.anual, get_resp(INCUMPLIMIENTO, p.incumplimiento), p.incumplimiento, get_resp(ACTIVIDAD, p.actividad), p.actividad
+               , get_resp(RECURRENTE, p.recurrente), p.recurrente, get_resp(TRANSVERSAL, p.transversal), p.transversal, get_resp(INCIDENCIA, p.incidencia), p.incidencia
+              , get_resp(MULTICONTRATO, p.multicontrato), p.multicontrato, get_resp(MARCO, p.marco), p.marco, p.puntaje
+              ]
+        data.append(row)
+    return data
