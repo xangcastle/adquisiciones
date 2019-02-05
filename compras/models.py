@@ -147,7 +147,11 @@ class Proveedor(models.Model):
 
 class Evaluacion(models.Model):
     user = models.ForeignKey(User, null=True)
-    proveedor = models.ForeignKey(Proveedor)
+    proveedor = models.ForeignKey(Proveedor, null=True, blank=True)
+    codigo_cliente         = models.CharField(max_length=15, null=True, blank=True)
+    nombre                 = models.CharField(max_length=125, null=True, blank=True)
+    actividad_economica    = models.CharField(max_length=125, verbose_name="Actividad Comercial", null=True, blank=True)
+    identificacion         = models.CharField(max_length=24, verbose_name="RUC/CEDULA", null=True, blank=True)
     fecha = models.DateField()
     importacia = models.PositiveIntegerField(null=True, choices=IMPORTANCIA,
                                              verbose_name="Importante para el funcionamiento estrategico del Banco y para atencion de clientes?")

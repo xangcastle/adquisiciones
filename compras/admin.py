@@ -65,6 +65,9 @@ class proveedor_admin(ImportExportModelAdmin):
             e = Evaluacion()
             e.fecha = datetime.now()
             e.proveedor = o
+            e.codigo_cliente = o.codigo_cliente
+            e.nombre = o.nombre
+            e.identificacion = o.identificacion
             e.user = o.usuario
             e.save()
         messages.add_message(request, messages.INFO,
