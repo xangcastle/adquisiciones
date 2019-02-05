@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -17,9 +18,6 @@ TIPOS_PROVEEDOR = (
     ('OC', "OCACIONAL"),
 )
 
-
-
-# Valores de la Evaluacion
 
 IMPORTANCIA = ((15, "SI"), (0, "NO"))
 COMPLEJIDAD = ((10, "ALTA"), (0, "BAJA"))
@@ -148,8 +146,9 @@ class Proveedor(models.Model):
 
 
 class Evaluacion(models.Model):
+    user = models.ForeignKey(User, null=True)
     proveedor = models.ForeignKey(Proveedor)
-    fecha = models.DateField(auto_now=True)
+    fecha = models.DateField()
     importacia = models.PositiveIntegerField(null=True, choices=IMPORTANCIA,
                                              verbose_name="Importante para el funcionamiento estrategico del Banco y para atencion de clientes?")
     complejidad = models.PositiveIntegerField(null=True, choices=COMPLEJIDAD,
@@ -176,6 +175,9 @@ class Evaluacion(models.Model):
     def __unicode__(self):
         return "%s %s" % (str(self.proveedor), str(self.fecha.year))
 
+    class Meta:
+        verbose_name_plural = "evaluaciónes"
+
 
 class Expediente(models.Model):
     proveedor = models.ForeignKey(Proveedor)
@@ -188,14 +190,23 @@ class Expediente(models.Model):
         verbose_name_plural = "Expediente"
 
 
-def datos_evaluacion(proveedores):
+def datos_evaluacion(evaluaciones):
     data = []
-    for p in proveedores:
-        row = [p.codigo_cliente, p.nombre, p.actividad_economica, p.identificacion, p.direccion, p.contacto, p.telefono, p.pago_anual, p.buro, get_resp(IMPORTANCIA, p.importacia), p.importacia
-              , get_resp(COMPLEJIDAD, p.complejidad), p.complejidad, get_resp(REEMPLAZO, p.reemplazo), p.reemplazo, get_resp(CREDITO, p.credito), p.credito
-               , get_resp(ANUAL, p.anual), p.anual, get_resp(INCUMPLIMIENTO, p.incumplimiento), p.incumplimiento, get_resp(ACTIVIDAD, p.actividad), p.actividad
-               , get_resp(RECURRENTE, p.recurrente), p.recurrente, get_resp(TRANSVERSAL, p.transversal), p.transversal, get_resp(INCIDENCIA, p.incidencia), p.incidencia
-              , get_resp(MULTICONTRATO, p.multicontrato), p.multicontrato, get_resp(MARCO, p.marco), p.marco, p.puntaje
+    for p in evaluaciones:
+        row = [p.proveedor.codigo_cliente, p.proveedor.nombre, p.proveedor.actividad_economica,
+               p.proveedor.identificacion, p.proveedor.direccion, p.proveedor.contacto,
+               p.proveedor.telefono, p.proveedor.pago_anual,
+               p.proveedor.buro, get_resp(IMPORTANCIA, p.importacia), p.importacia,
+               get_resp(COMPLEJIDAD, p.complejidad),
+               p.complejidad, get_resp(REEMPLAZO, p.reemplazo),
+               p.reemplazo, get_resp(CREDITO, p.credito), p.credito,
+               get_resp(ANUAL, p.anual), p.anual,
+               get_resp(INCUMPLIMIENTO, p.incumplimiento), p.incumplimiento,
+               get_resp(ACTIVIDAD, p.actividad), p.actividad,
+               get_resp(RECURRENTE, p.recurrente), p.recurrente, get_resp(TRANSVERSAL, p.transversal),
+               p.transversal, get_resp(INCIDENCIA, p.incidencia), p.incidencia,
+               get_resp(MULTICONTRATO, p.multicontrato), p.multicontrato, get_resp(MARCO, p.marco),
+               p.marco, p.puntaje
               ]
         data.append(row)
     return data

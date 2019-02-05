@@ -32,3 +32,7 @@ def asignar_cuenta(request):
             s.save()
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
+
+
+def imprimir_evaluacion(request):
+    return render(request, '')

@@ -22,7 +22,7 @@
                 } else{
                     return parseInt($('#'+campo).val());
                 }
-            }
+            };
 
             var evaluar = function(){
                 var puntaje = evaluacion('id_importacia');
@@ -40,10 +40,15 @@
                 $('#id_puntaje').val(puntaje);
             }
 
-            $('.evaluacion select').on('change', evaluar);
+            $('select').on('change', evaluar);
             evaluar();
         });
     })(grp.jQuery)
 </script>
 {% endblock %}
 
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li><a href="{% url 'imprimir_evaluacion' %}?id={{ original.id }}"></a></li>
+{% endblock %}
