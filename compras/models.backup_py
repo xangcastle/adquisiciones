@@ -18,22 +18,11 @@ TIPOS_PROVEEDOR = (
     ('OC', "OCACIONAL"),
 )
 
-TIPOS_RIESGO = (
-  (1, "BAJO"),
-  (2, "MEDIO"),
-  (3, "ALTO"),
-)
-
-TERCERIZACION = (
-  (1, "NO"),
-  (2, "SI"),
-)
-
 
 IMPORTANCIA = ((15, "SI"), (0, "NO"))
 COMPLEJIDAD = ((10, "ALTA"), (0, "BAJA"))
 REEMPLAZO = ((10, "ALTA COMPLEJIDAD"), (0, "COMPLEJIDAD ACEPTABLE"))
-CREDITO = ((10, "B, C, D, E o No encontrado/consultado, Ninguna"), (0, "Excelentes (A)"))
+CREDITO = ((10, "B, C, D o D"), (0, "Excelentes (A), No encontrado/consultado, Ninguna"))
 ANUAL = ((10, "Mayor 5% Utilidades Netas del periodo anterior"), (0, "Menor al 5% Utilidades Netas del periodo anterior"))
 INCUMPLIMIENTO = ((10, "SI"), (0, "NO"))
 ACTIVIDAD = ((8, "SI"), (0, "NO"))
@@ -66,8 +55,6 @@ class Proveedor(models.Model):
     telefono               = models.CharField(max_length=60, null=True, blank=True)
     r_legal                = models.CharField(max_length=165, null=True, blank=True, verbose_name="Nombre del Representante Legal")
     buro                   = models.CharField(max_length=165, null=True, blank=True, verbose_name="calificacion de credito")
-    tipo_riesgo            = models.PositiveIntegerField(choices=TIPOS_RIESGO, default=1, null=True)
-    tercerizacion          = models.PositiveIntegerField(choices=TERCERIZACION, default=2, null=True, verbose_name="Es tercerizacion?")
     cuenta_cordobas        = models.CharField(max_length=18, null=True, blank=True)
     beneficiario_cordobas  = models.CharField(max_length=160, null=True, blank=True)
     cuenta_dolares         = models.CharField(max_length=18, null=True, blank=True)
@@ -95,17 +82,37 @@ class Proveedor(models.Model):
     puntaje = models.PositiveIntegerField(null=True, default=0)
 
     def __unicode__(self):
-        return self.codigo
+        return self.nombre
 
     class Meta:
         verbose_name_plural = "proveedores"
 
+    def evaluacion(self, campo):
+        if campo:
+            return int(campo)
+        else:
+            return 0
 
     def respuesta(self, campo):
         if campo:
             return campo
         else:
             return 0
+
+
+    def calcular_puntaje(self):
+	return self.evaluacion(self.importacia) \
+      + self.evaluacion(self.complejidad) \
+      + self.evaluacion(self.reemplazo) \
+      + self.evaluacion(self.credito) \
+      + self.evaluacion(self.anual) \
+      + self.evaluacion(self.incumplimiento) \
+      + self.evaluacion(self.actividad) \
+      + self.evaluacion(self.recurrente) \
+      + self.evaluacion(self.transversal) \
+      + self.evaluacion(self.incidencia) \
+      + self.evaluacion(self.multicontrato) \
+      + self.evaluacion(self.marco)
 
 
 
@@ -133,28 +140,18 @@ class Proveedor(models.Model):
         e.save()
         return e
 
+    def save(self, *args, **kwargs):
+        self.puntaje = self.calcular_puntaje()
+	super(Proveedor, self).save(*args, **kwargs)
+
 
 class Evaluacion(models.Model):
     user = models.ForeignKey(User, null=True)
     proveedor = models.ForeignKey(Proveedor, null=True, blank=True)
-    codigo                 = models.CharField(max_length=15, verbose_name="Codigo del Proveedor", null=True)
-    codigo_cliente         = models.CharField(max_length=15, null=True)
-    nombre                 = models.CharField(max_length=125, null=True)
-    actividad_economica    = models.CharField(max_length=125, verbose_name="Actividad Comercial", null=True)
-    servicio               = models.CharField(max_length=125, verbose_name="Servicios Prestados", null=True)
-    identificacion         = models.CharField(max_length=24, verbose_name="RUC/CEDULA")
-    direccion              = models.TextField(max_length=600, null=True, blank=True)
-    pago_anual             = models.FloatField(null=True, blank=True)
-    forma_pago             = models.CharField(max_length=4, choices=FORMAS_PAGO, null=True)
-    contacto               = models.CharField(max_length=120, null=True, blank=True)
-    email                  = models.EmailField(max_length=120, null=True, blank=True)
-    telefono               = models.CharField(max_length=60, null=True, blank=True)
+    codigo_cliente         = models.CharField(max_length=15, null=True, blank=True)
+    nombre                 = models.CharField(max_length=125, null=True, blank=True)
+    actividad_economica    = models.CharField(max_length=125, verbose_name="Actividad Comercial", null=True, blank=True)
     identificacion         = models.CharField(max_length=24, verbose_name="RUC/CEDULA", null=True, blank=True)
-    r_legal                = models.CharField(max_length=165, null=True, blank=True, verbose_name="Nombre del Representante Legal")
-    buro                   = models.CharField(max_length=165, null=True, blank=True, verbose_name="calificacion de credito")
-    relacionado            = models.BooleanField(default=False)
-    tipo_riesgo            = models.PositiveIntegerField(choices=TIPOS_RIESGO, default=1, null=True)
-    tercerizacion          = models.PositiveIntegerField(choices=TERCERIZACION, default=2, null=True, verbose_name="Es tercerizacion?")
     fecha = models.DateField()
     importacia = models.PositiveIntegerField(null=True, choices=IMPORTANCIA,
                                              verbose_name="Importante para el funcionamiento estrategico del Banco y para atencion de clientes?")
@@ -181,30 +178,6 @@ class Evaluacion(models.Model):
 
     def __unicode__(self):
         return "%s %s" % (str(self.proveedor), str(self.fecha.year))
-
-    def evaluacion(self, campo):
-        if campo:
-            return int(campo)
-        else:
-            return 0
-
-    def calcular_puntaje(self):
-	return self.evaluacion(self.importacia) \
-      + self.evaluacion(self.complejidad) \
-      + self.evaluacion(self.reemplazo) \
-      + self.evaluacion(self.credito) \
-      + self.evaluacion(self.anual) \
-      + self.evaluacion(self.incumplimiento) \
-      + self.evaluacion(self.actividad) \
-      + self.evaluacion(self.recurrente) \
-      + self.evaluacion(self.transversal) \
-      + self.evaluacion(self.incidencia) \
-      + self.evaluacion(self.multicontrato) \
-      + self.evaluacion(self.marco)
-
-    def save(self, *args, **kwargs):
-        self.puntaje = self.calcular_puntaje()
-	super(Evaluacion, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "evaluaciónes"
@@ -236,8 +209,8 @@ def datos_evaluacion(evaluaciones):
                get_resp(ACTIVIDAD, p.actividad), p.actividad,
                get_resp(RECURRENTE, p.recurrente), p.recurrente, get_resp(TRANSVERSAL, p.transversal),
                p.transversal, get_resp(INCIDENCIA, p.incidencia), p.incidencia,
-               get_resp(MULTICONTRATO, p.multicontrato), p.multicontrato, get_resp(MARCO, p.marco), p.marco,
-               p.puntaje, p.user.username
+               get_resp(MULTICONTRATO, p.multicontrato), p.multicontrato, get_resp(MARCO, p.marco),
+               p.marco, p.puntaje
               ]
         data.append(row)
     return data

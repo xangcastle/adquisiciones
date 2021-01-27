@@ -46,7 +46,8 @@ class proveedor_admin(ImportExportModelAdmin):
                 ('codigo', 'codigo_cliente'), ('nombre', 'identificacion'),
                 ('servicio', 'actividad_economica'), ('forma_pago', 'contacto'),
                 'email', ('telefono', 'r_legal'), 'direccion',
-                ('usuario', 'buro')
+                ('usuario', 'buro'),
+	         ('tipo_riesgo', 'tercerizacion')
             )
         }),
         ('Informacion Adicional', {
@@ -65,9 +66,20 @@ class proveedor_admin(ImportExportModelAdmin):
             e = Evaluacion()
             e.fecha = datetime.now()
             e.proveedor = o
-            e.codigo_cliente = o.codigo_cliente
+    	    e.codigo = o.codigo
+	    e.codigo_cliente = o.codigo_cliente
             e.nombre = o.nombre
             e.identificacion = o.identificacion
+            e.r_legal = o.r_legal
+ 	    e.servicio = o.servicio
+            e.actividad_economica = o.actividad_economica
+	    e.email = o.email
+ 	    e.telefono = o.telefono
+	    e.direccion = o.direccion
+	    e.tipo_riesgo = o.tipo_riesgo
+ 	    e.tercerizacion = o.tercerizacion
+	    e.buro = o.buro
+            e.relacionado = o.relacionado
             e.user = o.usuario
             e.save()
         messages.add_message(request, messages.INFO,
@@ -79,11 +91,19 @@ class proveedor_admin(ImportExportModelAdmin):
 class evaluacion_admin(ImportExportModelAdmin):
     date_hierarchy = 'fecha'
     change_form_template = "compras/evaluacion.html"
-    list_display = ('proveedor', 'puntaje')
+    list_display = ('nombre', 'identificacion', 'email', 'user', 'puntaje')
     readonly_fields = ('user', 'proveedor')
-    list_filter = ('user',)
+    list_filter = ('user', 'puntaje')
     search_fields = ('proveedor__nombre',)
-    fields = (('user', 'proveedor'), 'importacia', 'complejidad',
+    fields = (('user', 'proveedor'),
+		('codigo', 'codigo_cliente'),
+		'r_legal',
+		('servicio', 'actividad_economica'),
+		('email', 'telefono'),
+		'direccion',
+		('buro', 'relacionado'),
+ 		('tipo_riesgo', 'tercerizacion'),
+		'importacia', 'complejidad',
               'reemplazo', 'credito', 'anual', 'incumplimiento', 'actividad',
               'recurrente', 'transversal', 'incidencia', 'multicontrato',
               'marco', 'puntaje')
@@ -111,7 +131,7 @@ class evaluacion_admin(ImportExportModelAdmin):
                          "Interrelacion de la operacion contratada con el resto de operacions de la institucion financiera",
                          "Fallas del proveedor pone en riesgo las ganancias, solvencia, liquidez, capital, reputacion, fondeo o sistemas de control interno",
                          "Existen mas de dos contratos vigentes con este mismo proveedor",
-                         "Marco regulatorio del proveedor"
+                         "Marco regulatorio del proveedor", "Puntaje", "Usuario Evaluador"
                          ]
         book = xlwt.Workbook(encoding='utf8')
         sheet = book.add_sheet("Reporte de Evaluacion")
@@ -124,10 +144,11 @@ class evaluacion_admin(ImportExportModelAdmin):
         c2 = 10
         for r, d in enumerate(primera_linea[:9]):
             sheet.write_merge(0, 1, r, r, d, style=fill_grey_style)
-        for r, d in enumerate(primera_linea[9:]):
+        for r, d in enumerate(primera_linea[9:20]):
             sheet.write_merge(0, 0, c1 + (r * 2), c2 + (r * 2), d, style=fill_grey_style)
             sheet.write(1, c1 + (r * 2), "Respuesta", style=fill_grey_style)
             sheet.write(1, c2 + (r * 2), "Valor", style=fill_grey_style)
+	
         data = datos_evaluacion(queryset)
         col = 0
         for r, d in enumerate(data):
