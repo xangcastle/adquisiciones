@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'extras',
+    # 'extras',
     'grappelli',
     'import_export',
     'adminactions',

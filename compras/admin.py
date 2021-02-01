@@ -144,10 +144,12 @@ class evaluacion_admin(ImportExportModelAdmin):
         c2 = 10
         for r, d in enumerate(primera_linea[:9]):
             sheet.write_merge(0, 1, r, r, d, style=fill_grey_style)
-        for r, d in enumerate(primera_linea[9:20]):
+        for r, d in enumerate(primera_linea[9:21]):
             sheet.write_merge(0, 0, c1 + (r * 2), c2 + (r * 2), d, style=fill_grey_style)
             sheet.write(1, c1 + (r * 2), "Respuesta", style=fill_grey_style)
             sheet.write(1, c2 + (r * 2), "Valor", style=fill_grey_style)
+        for r, d in enumerate(primera_linea[21:23]):
+            sheet.write_merge(0, 1, r+33, r+33, d, style=fill_grey_style)
 	
         data = datos_evaluacion(queryset)
         col = 0
