@@ -49,6 +49,7 @@ class EvaluacionRiesgoAdmin(ImportExportModelAdmin):
                 'acceso_red',
                 'tiene_sucursal',
                 'usa_intermediarios',
+                'riesgo_tipo_servicio',
             )
         }),
         ('Evaluación de riesgo DDP', {
@@ -63,6 +64,7 @@ class EvaluacionRiesgoAdmin(ImportExportModelAdmin):
                 'tiene_experiencia',
                 'estados_financieros',
                 'tiene_quejas',
+                'riesgo_proveedor',
             )
         }),
         ('Evaluación de riesgo LDFT', {
@@ -71,8 +73,6 @@ class EvaluacionRiesgoAdmin(ImportExportModelAdmin):
                 'actividad_economica',
                 'nacionalidad',
                 'jurisdiccion',
-                'riesgo_tipo_servicio',
-                'riesgo_proveedor',
                 'nivel_riesgo',
                 'calculo_riesgo',
             )

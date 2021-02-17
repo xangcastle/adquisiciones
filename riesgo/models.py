@@ -251,14 +251,15 @@ class EvaluacionRiesgo(models.Model):
 
 @receiver(pre_save, sender=EvaluacionRiesgo)
 def calcular_evaluacion(sender, instance, **kwargs):
-    instance.riesgo_tipo_servicio = (instance.acceso_sistema + instance.acceso_equipos + instance.acceso_info
-                                     + instance.acceso_red + instance.tiene_sucursal + instance.usa_intermediarios) / 6
-    instance.riesgo_proveedor = (instance.en_lista + instance.materialmente_importante
-                                 + instance.es_cliente + instance.tiene_alerta
-                                 + instance.evaluacion_proveedor + instance.no_contingencia
-                                 + instance.tiene_experiencia + instance.estados_financieros
-                                 + instance.tiene_quejas) / 9
-    instance.calculo_riesgo = (instance.riesgo_tipo_servicio + instance.riesgo_proveedor
-                               + instance.riesgo_nacionalidad + instance.riesgo_jurisdiccion) / 4
+    instance.riesgo_tipo_servicio = round((instance.acceso_sistema + instance.acceso_equipos
+                                           + instance.acceso_info + instance.acceso_red
+                                           + instance.tiene_sucursal + instance.usa_intermediarios) / 6, 2)
+    instance.riesgo_proveedor = round((instance.en_lista + instance.materialmente_importante
+                                       + instance.es_cliente + instance.tiene_alerta
+                                       + instance.evaluacion_proveedor + instance.no_contingencia
+                                       + instance.tiene_experiencia + instance.estados_financieros
+                                       + instance.tiene_quejas) / 9, 2)
+    instance.calculo_riesgo = round((instance.riesgo_tipo_servicio + instance.riesgo_proveedor
+                                     + instance.riesgo_nacionalidad + instance.riesgo_jurisdiccion) / 4, 2)
 
-    instance.nivel_riesgo = int(instance.calculo_riesgo)
+    instance.nivel_riesgo = int(round(instance.calculo_riesgo, 0))
