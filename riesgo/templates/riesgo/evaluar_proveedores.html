@@ -1,0 +1,62 @@
+{% extends 'admin/base_site.html' %}
+
+
+{% block content %}
+    <form action="." id="evaluar-form" method="POST">
+        {% csrf_token %}
+        <button style="width: 180px" type="submit" class="grp-button">
+            Generar evaluaciones
+        </button>
+        <table class="grp-table">
+            <thead>
+            <tr>
+                <th style="text-align: center; vertical-align: middle; height: 25px">
+                    <input type="checkbox" id="check-all">
+                </th>
+                <th>Proveedor</th>
+                <th>Usuario</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for proveedor in proveedores %}
+                <tr>
+                    <td style="text-align: center; vertical-align: middle; height: 25px">
+                        <input type="checkbox" name="proveedor" value="{{ proveedor.id }}">
+                    </td>
+                    <td>{{ proveedor.nombre }}</td>
+                    <td>
+                        <select disabled name="user">
+                            {% for usuario in usuarios %}
+                                <option value="{{ usuario.id }}"
+                                        {% ifequal usuario.id proveedor.user.id %}selected{% endifequal %}
+                                >{{ usuario.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </form>
+    <script type="text/javascript">
+        (function ($) {
+            $(document).ready(function () {
+                $('#check-all').on('change', function () {
+                    $('input[name="proveedor"]').prop('checked', $(this).is(':checked'))
+                        .trigger('change')
+                });
+                $('input[name="proveedor"]').on('change', function () {
+                    const $tr = $(this).parents('tr')
+                    const $select = $($tr).find('select')
+                    console.log($select)
+                    if ($(this).is(':checked')) {
+                        $($select).removeAttr('disabled')
+                    } else {
+                        $($select).attr('disabled', 'disabled')
+                    }
+                });
+            })
+        })(grp.jQuery)
+    </script>
+{% endblock %}
