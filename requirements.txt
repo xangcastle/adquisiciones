@@ -1,7 +1,7 @@
 asgiref==3.3.1
 defusedxml==0.6.0
 diff-match-patch==20200713
-Django==3.1.6
+Django==3.1.12
 django-adminactions==1.9
 django-grappelli==2.14.3
 django-grappelli-extras==1.2.3
