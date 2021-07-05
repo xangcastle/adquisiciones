@@ -230,13 +230,17 @@ class Expediente(models.Model):
         verbose_name = "Documento"
         verbose_name_plural = "Expediente"
 
+def format_relacionado(valor):
+    if valor:
+        return "SI"
+    return "NO"
 
 def datos_evaluacion(evaluaciones):
     data = []
     for p in evaluaciones:
         row = [p.proveedor.codigo_cliente, p.proveedor.nombre, p.proveedor.actividad_economica,
                p.proveedor.identificacion, p.proveedor.direccion, p.proveedor.contacto,
-               p.proveedor.telefono, p.proveedor.pago_anual,
+               p.proveedor.telefono, format_relacionado(p.proveedor.relacionado), p.proveedor.pago_anual,
                p.proveedor.buro, get_resp(IMPORTANCIA, p.importacia), p.importacia,
                get_resp(COMPLEJIDAD, p.complejidad),
                p.complejidad, get_resp(REEMPLAZO, p.reemplazo),
@@ -247,6 +251,7 @@ def datos_evaluacion(evaluaciones):
                get_resp(RECURRENTE, p.recurrente), p.recurrente, get_resp(TRANSVERSAL, p.transversal),
                p.transversal, get_resp(INCIDENCIA, p.incidencia), p.incidencia,
                get_resp(MULTICONTRATO, p.multicontrato), p.multicontrato, get_resp(MARCO, p.marco), p.marco,
+               p.get_tercerizacion_display(),p.get_tipo_riesgo_display(),'',
                p.puntaje, p.user.username
                ]
         data.append(row)

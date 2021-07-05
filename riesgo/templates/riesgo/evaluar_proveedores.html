@@ -28,7 +28,7 @@
                         <select disabled name="user">
                             {% for usuario in usuarios %}
                                 <option value="{{ usuario.id }}"
-                                        {% ifequal usuario.id proveedor.user.id %}selected{% endifequal %}
+                                        {% ifequal usuario.id proveedor.usuario.id %}selected{% endifequal %}
                                 >{{ usuario.username }}</option>
                             {% endfor %}
                         </select>

@@ -31,7 +31,6 @@ class JurisdiccionAdmin(ImportExportModelAdmin):
 @admin.register(EvaluacionRiesgo)
 class EvaluacionRiesgoAdmin(ImportExportModelAdmin):
     date_hierarchy = 'created'
-    list_filter=('user',)
     list_display = ('proveedor', 'user', 'nivel_riesgo', 'calculo_riesgo')
     fieldsets = (
         ('', {

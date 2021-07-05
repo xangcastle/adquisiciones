@@ -50,4 +50,6 @@
 
 {% block object-tools-items %}
     {{ block.super }}
+
+    <li><a href="{% url 'imprimir_evaluacion' %}?id={{ original.id }}"></a></li>
 {% endblock %}

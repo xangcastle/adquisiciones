@@ -196,8 +196,8 @@ class EvaluacionRiesgo(models.Model):
                                                            verbose_name="¿Es materialmente importante?")
     es_cliente = models.PositiveIntegerField(choices=EsCliente.choices, default=EsCliente.BAJO,
                                              verbose_name="¿Es cliente del banco?")
-    tiene_alerta = models.PositiveIntegerField(choices=TieneAlerta.choices,
-                                               default=TieneAlerta.BAJO,
+    tiene_alerta = models.PositiveIntegerField(choices=UsaIntermediarios.choices,
+                                               default=UsaIntermediarios.BAJO,
                                                verbose_name="¿Ha presentado alguna señal de alerta?")
     evaluacion_proveedor = models.PositiveIntegerField(choices=EvaProveedor.choices,
                                                        default=EvaProveedor.BAJO,
