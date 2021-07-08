@@ -238,21 +238,47 @@ def format_relacionado(valor):
 def datos_evaluacion(evaluaciones):
     data = []
     for p in evaluaciones:
-        row = [p.proveedor.codigo_cliente, p.proveedor.nombre, p.proveedor.actividad_economica,
-               p.proveedor.identificacion, p.proveedor.direccion, p.proveedor.contacto,
-               p.proveedor.telefono, format_relacionado(p.proveedor.relacionado), p.proveedor.pago_anual,
-               p.proveedor.buro, get_resp(IMPORTANCIA, p.importacia), p.importacia,
+        row = [p.proveedor.codigo_cliente,
+               p.proveedor.nombre,
+               p.proveedor.actividad_economica,
+               p.proveedor.identificacion,
+               p.proveedor.direccion,
+               p.proveedor.contacto,
+               p.proveedor.telefono,
+               format_relacionado(p.proveedor.relacionado),
+               p.proveedor.pago_anual,
+               p.proveedor.buro,  # 9
+
+               get_resp(IMPORTANCIA, p.importacia),
+               p.importacia,
                get_resp(COMPLEJIDAD, p.complejidad),
-               p.complejidad, get_resp(REEMPLAZO, p.reemplazo),
-               p.reemplazo, get_resp(CREDITO, p.credito), p.credito,
-               get_resp(ANUAL, p.anual), p.anual,
-               get_resp(INCUMPLIMIENTO, p.incumplimiento), p.incumplimiento,
-               get_resp(ACTIVIDAD, p.actividad), p.actividad,
-               get_resp(RECURRENTE, p.recurrente), p.recurrente, get_resp(TRANSVERSAL, p.transversal),
-               p.transversal, get_resp(INCIDENCIA, p.incidencia), p.incidencia,
-               get_resp(MULTICONTRATO, p.multicontrato), p.multicontrato, get_resp(MARCO, p.marco), p.marco,
-               p.get_tercerizacion_display(),p.get_tipo_riesgo_display(),'',
-               p.puntaje, p.user.username
+               p.complejidad,
+               get_resp(REEMPLAZO, p.reemplazo),
+               p.reemplazo,
+               get_resp(CREDITO, p.credito),
+               p.credito,
+               get_resp(ANUAL, p.anual),
+               p.anual,
+               get_resp(INCUMPLIMIENTO, p.incumplimiento),
+               p.incumplimiento,
+               get_resp(ACTIVIDAD, p.actividad),
+               p.actividad,
+               get_resp(RECURRENTE, p.recurrente),
+               p.recurrente,
+               get_resp(TRANSVERSAL, p.transversal),
+               p.transversal,
+               get_resp(INCIDENCIA, p.incidencia),
+               p.incidencia,
+               get_resp(MULTICONTRATO, p.multicontrato),
+               p.multicontrato,
+               get_resp(MARCO, p.marco),
+
+               p.marco,
+               p.get_tercerizacion_display(),
+               p.get_tipo_riesgo_display(),
+               '',
+               p.puntaje,
+               p.user.username
                ]
         data.append(row)
     return data

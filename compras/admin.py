@@ -130,41 +130,53 @@ class EvaluacionAdmin(admin.ModelAdmin):
             return queryset.filter(user=usuario)
 
     def reporte_evaluacion(self, request, queryset):
-        primera_linea = ["Codigo", "Nombre", "Actividad Economica",
-                         "Identificacion", "Direccion", "Contacto", "Telefono", "Monto Anual Facturado",
+        primera_linea = ["Codigo",
+                         "Nombre",
+                         "Actividad Economica",
+                         "Identificacion",
+                         "Direccion",
+                         "Contacto",
+                         "Telefono",
+                         "Relacionado",
+                         "Monto Anual Facturado",
                          "Resultado de Consulta de Credito",
+
                          "Importante para el funcionamiento estrategico del Banco y para atencion de clientes?",
                          "Complejidad de la contratacion",
                          "Habilidad para reemplazar a la empresa por otra",
-                         "Reputacion financiera y solvencia", "Relacionado",
+                         "Reputacion financiera y solvencia",
                          "Monto total anual pagado al proveedor",
                          "La interrupcion del servicio genera incumplimiento regulatorio/legales al Banco",
-                         "Importancia de la actividad a ser contratada en relacion al giro principal de negocios de la institucion",
+                         "Importancia de la actividad a ser contratada en relacion al giro principal de"
+                         " negocios de la institucion",
                          "Relacion del Proveedor de servicios con la institucion financiera",
-                         "Interrelacion de la operacion contratada con el resto de operacions de la institucion financiera",
-                         "Fallas del proveedor pone en riesgo las ganancias, solvencia, liquidez, capital, reputacion, fondeo o sistemas de control interno",
+                         "Interrelacion de la operacion contratada con el resto de operacions "
+                         "de la institucion financiera",
+                         "Fallas del proveedor pone en riesgo las ganancias, solvencia, liquidez, "
+                         "capital, reputacion, fondeo o sistemas de control interno",
                          "Existen mas de dos contratos vigentes con este mismo proveedor",
-                         "Marco regulatorio del proveedor", 
-			 "¿Es tercerización?", "Tipo de riesgo", "¿Es materialmente importante?",
-			 "Puntaje", "Usuario Evaluador"
+
+                         "Marco regulatorio del proveedor",
+                         "¿Es tercerización?",
+                         "Tipo de riesgo",
+                         "¿Es materialmente importante?",
+                         "Puntaje",
+                         "Usuario Evaluador"
                          ]
         book = xlwt.Workbook(encoding='utf8')
         sheet = book.add_sheet("Reporte de Evaluacion")
         default_style = xlwt.Style.default_style
-        font_size_style = xlwt.easyxf('font: name Calibri, bold on, height 280;')
-        font_underline_style = xlwt.easyxf('font: underline on;')
         fill_grey_style = xlwt.easyxf('pattern: back_color gray25;')
-        fill_yellow_style = xlwt.easyxf('pattern: back_color yellow;')
         c1 = 10
         c2 = 11
-        for r, d in enumerate(primera_linea[:c1]):
+        for r, d in enumerate(primera_linea[:10]):
             sheet.write_merge(0, 1, r, r, d, style=fill_grey_style)
-        for r, d in enumerate(primera_linea[c1:22]):
+        for r, d in enumerate(primera_linea[10:22]):
             sheet.write_merge(0, 0, c1 + (r * 2), c2 + (r * 2), d, style=fill_grey_style)
             sheet.write(1, c1 + (r * 2), "Respuesta", style=fill_grey_style)
             sheet.write(1, c2 + (r * 2), "Valor", style=fill_grey_style)
-        for r, d in enumerate(primera_linea[22:26]):
-            sheet.write_merge(0, 1, r + 33, r + 33, d, style=fill_grey_style)
+        for r, d in enumerate(primera_linea[22:27]):
+            sheet.write_merge(0, 1, r + 34, r + 34, d, style=fill_grey_style)
 
         data = datos_evaluacion(queryset)
         col = 0
